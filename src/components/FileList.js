@@ -9,7 +9,7 @@ function FileList({ filesArr, onChangeCheckbox, onChangeCheckboxAll }) {
                     <tr>
                         <th scope="col" className="p-1 w-8">
                             <div className="flex items-center">
-                                <input id="checkbox-all-files" type="checkbox" className="w-5 h-5 accent-dark-jungle bg-gray-100 border-pigeon-40 rounded cursor-pointer" onChange={e => onChangeCheckboxAll(e.target)} />
+                                <input id="checkbox-all-files" type="checkbox" className="w-5 h-5 accent-dark-jungle bg-gray-100 border-pigeon-40 rounded cursor-pointer" onChange={onChangeCheckboxAll} />
                             </div>
                         </th>
                         <th scope="col" className="w-10">

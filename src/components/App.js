@@ -7,54 +7,41 @@ function App() {
     const [checkedArr, setCheckedArr] = useState([]);
 
     useEffect(() => {
-        setFilesArr(fetchAllFiles);
+        const abortControler = new AbortController()
+        const timeout = setTimeout(() => {
+            abortControler.abort()
+        }, 600)
+
+        fetch("data/files.json", {
+            signal: abortControler.signal
+        }).then(function (response) {
+            return response.json();
+        }).then(function (response) {
+            setFilesArr(response);
+        });
+
+        clearTimeout(timeout)
     }, []);
 
-    function fetchAllFiles() {
-        return [{
-            "id": "1",
-            "name": "Hankedokumendid-5",
-            "type": "FOLDER",
-            "created": "2022-02-01 00:00:49.231+02",
-            "createdBy": "Anne Salat"
-        },
-        {
-            "id": "2",
-            "name": "Allkirjastamiseks-1.asice",
-            "type": "CONTAINER",
-            "created": "2022-02-03 00:00:49.231+02",
-            "createdBy": "Anne Salat",
-            "status": "SIGNING",
-            "totalSigners": "3",
-            "signedBy": "2",
-            "version": "1"
-        },
-        {
-            "id": "3",
-            "name": "Kontrollakt.pdf",
-            "type": "FILE",
-            "created": "2022-02-05 00:00:49.231+02",
-            "createdBy": "Projektijuht Mihkel-Oliver",
-            "version": "3"
-        },
-        {
-            "id": "4",
-            "name": "Allkirjastamiseks-3.asice",
-            "type": "CONTAINER",
-            "created": "2022-02-04 00:00:49.231+02",
-            "createdBy": "Anne Salat",
-            "status": "DECLINED",
-            "totalSigners": "4",
-            "signedBy": "1",
-            "version": "1"
-        },
-        {
-            "id": "5",
-            "name": "Hankedokumendid-6",
-            "type": "FOLDER",
-            "created": "2022-02-02 00:00:49.231+02",
-            "createdBy": "Anne Salat"
-        }]
+    useEffect(() => {
+        const trashBtn = document.getElementById("trash-button");
+        checkedArr.length > 0 ? trashBtn.disabled = false : trashBtn.disabled = true;
+    }, [checkedArr]);
+
+    function deleteFilesMock(ids) {
+        const timeout = setTimeout(function(){
+            console.log(ids);
+            for (let i = 0; i < filesArr.length; i++) {
+                if (ids.includes(filesArr[i].id)) {
+                    filesArr.splice(i, 1);
+                    
+                    for (let j = 0; j < checkedArr.length; j++) {
+                        checkedArr.splice(j, 1);
+                    }
+                }
+            }
+        }(), 600);
+        clearTimeout(timeout);
     }
 
     function onChangeCheckbox(target) {
@@ -78,7 +65,7 @@ function App() {
         }
     }
 
-    function onChangeCheckboxAll(target) {
+    function onChangeCheckboxAll() {
         let trArr = document.getElementsByTagName("tbody")[0].childNodes;
 
         if (checkedArr.length === filesArr.length) {
@@ -97,6 +84,12 @@ function App() {
                 tr.classList.remove("hover:bg-gray-50");
                 tr.getElementsByTagName("input")[0].checked = true;
             });
+        }
+    }
+
+    function onClickTrash(target) {
+        if (!target.disabled) {
+            deleteFilesMock(checkedArr);
         }
     }
 
@@ -119,10 +112,11 @@ function App() {
             </nav>
 
             <div className="mb-4">
-                <button className="m-1.5 curson-pointer enabled:hover:opacity-80" disabled>
+                <button id="trash-button" className="m-1.5 curson-pointer enabled:hover:opacity-80" onClick={e => onClickTrash(e.currentTarget)}>
                     <FeatherIcon icon="trash" size="18" />
                 </button>
             </div>
+
             <FileList filesArr={filesArr} onChangeCheckbox={onChangeCheckbox} onChangeCheckboxAll={onChangeCheckboxAll} />
         </div>
     );
