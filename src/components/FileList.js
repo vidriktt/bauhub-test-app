@@ -16,10 +16,10 @@ function FileList({ filesArr, onChangeCheckbox, onChangeCheckboxAll }) {
                         </th>
                         <th scope="col" className="p-2 w-auto">
                         </th>
-                        <th scope="col" className="p-2 w-[6rem] text-[13px]">
+                        <th scope="col" className="p-2 w-[5rem] text-[13px]">
                             Allkirjad
                         </th>
-                        <th scope="col" className="p-2 w-[6rem] text-[13px] text-center">
+                        <th scope="col" className="p-2 w-[5rem] text-[13px] text-center">
                             Versioon
                         </th>
                         <th scope="col" className="p-2 w-1/4 text-[13px]">
@@ -37,7 +37,7 @@ function FileList({ filesArr, onChangeCheckbox, onChangeCheckboxAll }) {
                             </td>
                             {file.type === "FOLDER" ? (
                                 <td className="pl-2.5">
-                                    <FeatherIcon icon="folder" size="18" />
+                                    <FeatherIcon icon="folder" size="18" className="fill-black" />
                                 </td>
                             ) : (
                                 <td className="">
@@ -48,18 +48,20 @@ function FileList({ filesArr, onChangeCheckbox, onChangeCheckboxAll }) {
                                     )}
                                 </td>
                             )}
-                            {/* clock ; x-circle */}
                             <td className="p-2">
                                 {file.name}
                             </td>
                             <td className="p-2">
                                 {file.status && (file.status === "SIGNING" ? (
-                                    <div className="bg-warning-yellow-10 text-center flex justify-center">
+                                    <div className="py-1 flex justify-center items-end bg-warning-yellow-10 rounded-sm text-center">
                                         <FeatherIcon icon="clock" size="18" />
-                                        <span className="text-[13px] font-bold">{file.signedBy}/{file.totalSigners}</span>
+                                        <span className="pl-2 text-[13px] font-bold">{file.signedBy}/{file.totalSigners}</span>
                                     </div>
                                 ) : (
-                                    <div></div>
+                                    <div className="py-1 flex justify-center items-end bg-error-red-10 rounded-sm text-center">
+                                        <FeatherIcon icon="x-circle" size="18" />
+                                        <span className="pl-2 text-[13px] font-bold">{file.signedBy}/{file.totalSigners}</span>
+                                    </div>
                                 ))}
                             </td>
                             <td className="p-2 text-center">
