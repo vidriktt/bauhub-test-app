@@ -1,6 +1,6 @@
 # BAUHUB test app
 
-[Link to page](https://vidriktt.github.io/shopping-cart/)
+[Link to page](https://vidriktt.github.io/bauhub-test-app/)
 <br /><br />
 
 ## Available Scripts
