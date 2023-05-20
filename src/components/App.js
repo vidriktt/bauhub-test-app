@@ -29,39 +29,30 @@ function App() {
     }, [checkedArr]);
 
     function deleteFilesMock(ids) {
-        const timeout = setTimeout(function(){
-            console.log(ids);
-            for (let i = 0; i < filesArr.length; i++) {
-                if (ids.includes(filesArr[i].id)) {
-                    filesArr.splice(i, 1);
-                    
-                    for (let j = 0; j < checkedArr.length; j++) {
-                        checkedArr.splice(j, 1);
-                    }
-                }
-            }
+        const timeout = setTimeout(function () {
+            setFilesArr(filesArr.filter(file => !ids.includes(file.id)));
         }(), 600);
+
         clearTimeout(timeout);
     }
 
     function onChangeCheckbox(target) {
         let targetId = target.id.split("-")[2];
         let tr = document.getElementById("tr-" + targetId);
+        const checkboxAll = document.getElementById("checkbox-all-files");
 
         if (target.checked) {
             tr.classList.add("bg-mint");
             tr.classList.add("hover:bg-opacity-75");
             tr.classList.remove("hover:bg-gray-50");
+            setCheckedArr(checkedArr => [...checkedArr, targetId]);
+            checkedArr.length + 1 === filesArr.length && (checkboxAll.checked = true);
         } else {
             tr.classList.remove("bg-mint");
             tr.classList.remove("hover:bg-opacity-75");
             tr.classList.add("hover:bg-gray-50");
-        }
-
-        if (target.checked) {
-            setCheckedArr(checkedArr => [...checkedArr, targetId]);
-        } else {
             setCheckedArr(checkedArr.filter(e => e !== targetId));
+            checkboxAll.checked = false;
         }
     }
 
@@ -77,7 +68,7 @@ function App() {
                 tr.getElementsByTagName("input")[0].checked = false;
             });
         } else {
-            setCheckedArr([...Array(filesArr.length + 1).keys()].slice(1).map(String));
+            setCheckedArr(filesArr.map(file => file.id));
             trArr.forEach(tr => {
                 tr.classList.add("bg-mint");
                 tr.classList.add("hover:bg-opacity-75");
@@ -91,6 +82,9 @@ function App() {
         if (!target.disabled) {
             deleteFilesMock(checkedArr);
         }
+
+        checkedArr.length === filesArr.length && (document.getElementById("checkbox-all-files").click());
+        setCheckedArr([]);
     }
 
     return (
