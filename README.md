@@ -4,8 +4,13 @@
 <br /><br />
 
 ## Available Scripts
+<br />
 
 In the project directory, you can run:
+
+### `npm install`
+
+Installs project dependencies.
 
 ### `npm start`
 
